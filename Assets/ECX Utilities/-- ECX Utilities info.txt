@@ -1,0 +1,10 @@
+ECX UTILITY SCRIPTS
+Last updated: Jun 16, 2025
+
+A variety of Unity utility scripts that I've created over time.  Useful for almost any project to save time and focus on more important stuff.
+
+The scripts are organized into separate folders so you can delete any folders (or uncheck during import) if the related utility scripts aren't needed for your project.  For example, if your game project isn't using Unity's DOTS (Data Oriented Technology Stack), simply delete the DOTS folder and keep folders you intend to use.
+
+Note that many scripts inherit from the Singleton script (in the Common folder), so avoid deleting that one unless necessary.
+
+Enjoy!
