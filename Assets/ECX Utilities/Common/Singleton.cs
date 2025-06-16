@@ -3,7 +3,7 @@ ECX UTILITY SCRIPTS
 Singleton: Generic Template (Unity MonoBehaviour)
 A flexible pre-made Unity singleton script that can be implemented simply by inheriting from this class.
 Allows creation of multiple separate types of singleton without conflict (e.g. AudioManager singleton, UIManager singleton, etc)
-Last updated: Dec 26, 2023
+Last updated: June 15, 2025
 */
 
 using UnityEngine;
@@ -26,7 +26,7 @@ namespace EcxUtilities {
 				// Create singleton instance (only done once)
 				else {
 					// Search for all objects of this singletom type in scene
-					T[] managers = Object.FindObjectsOfType(typeof(T)) as T[];
+					T[] managers = Object.FindObjectsByType(typeof(T), FindObjectsSortMode.InstanceID) as T[];
 					// Create new Singleton if not found in scene
 					if (managers.Length == 0) {
 						GameObject go = new GameObject(typeof(T).Name, typeof(T));
