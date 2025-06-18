@@ -1,33 +1,35 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UIZoomImage : MonoBehaviour, IScrollHandler
-{
+public class UIZoomImage : MonoBehaviour, IScrollHandler {
 
-	private Vector3 initialScale;
-	[SerializeField] private float zoomSpeed = 0.1f;
-	[SerializeField] private float maxZoom = 10f;
+	[SerializeField] private float zoomSpeed = 0.01f;
+	[SerializeField] private float smoothingSpeed = 4f;
+	[SerializeField] private float maxZoom = 5f;
+	private Vector3 initialScale, targetScale;
 
-	private void Awake()
-	{
+	private void Awake() {
 		initialScale = transform.localScale;
+		targetScale = initialScale;
 	}
 
-	public void OnScroll(PointerEventData eventData)
-	{
-		var delta = Vector3.one * (eventData.scrollDelta.y * zoomSpeed);
-		var desiredScale = transform.localScale + delta;
-
-		desiredScale = ClampDesiredScale(desiredScale);
-
-		transform.localScale = desiredScale;
+	private void Update() {
+		bool zoomingIn = targetScale.x > transform.localScale.x;
+		float smoothSpeedInOut = zoomingIn ? smoothingSpeed / 2 : smoothingSpeed;	// Zoom in is faster than zoom out, so adjust speed
+		transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * smoothSpeedInOut);
 	}
 
-	private Vector3 ClampDesiredScale(Vector3 desiredScale)
-	{
-		desiredScale = Vector3.Max(initialScale, desiredScale);
-		desiredScale = Vector3.Min(initialScale * maxZoom, desiredScale);
-		return desiredScale;
+	public void OnScroll(PointerEventData eventData) {
+		Vector3 delta = Vector3.one * (eventData.scrollDelta.y * zoomSpeed);
+		targetScale = transform.localScale + delta;
+
+		targetScale = ClampTargetScale(targetScale);
+	}
+
+	private Vector3 ClampTargetScale(Vector3 scale) {
+		scale = Vector3.Max(initialScale, scale);
+		scale = Vector3.Min(initialScale * maxZoom, scale);
+		return scale;
 	}
 
 
