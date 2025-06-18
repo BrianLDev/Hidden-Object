@@ -17,21 +17,16 @@ public class CameraController : MonoBehaviour, IScrollHandler {
 
 		if (Mouse.current.leftButton.isPressed) {
 			Vector3 mouseWorldPos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-			if (Mouse.current.leftButton.wasPressedThisFrame) {
-				Debug.Log("Pan start");
-				dragStart = mouseWorldPos;
-			}
-			dragVec = dragStart - mouseWorldPos;
-			Debug.Log($"Pan Vector currently is {dragVec.ToString()}");
-		}
 
-		if (Mouse.current.leftButton.wasReleasedThisFrame)
+			if (Mouse.current.leftButton.wasPressedThisFrame)
+				dragStart = mouseWorldPos;
+			dragVec = dragStart - mouseWorldPos;
 			PanCamera();
+		}
 	}
 
 	private void PanCamera() {
 		cam.transform.position += dragVec;
-		Debug.Log("Pan end");
 	}
 
 	private void ZoomCamera() {
