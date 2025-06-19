@@ -25,16 +25,15 @@ namespace Lean.Touch {
 		public float Damping { set { damping = value; } get { return damping; } }
 		[SerializeField] private float damping = -1.0f;
 
-		/// <summary>This allows you to control how much momentum is retained when the dragging fingers are all released.
-		/// NOTE: This requires <b>Damping</b> to be above 0.</summary>
-		public float Inertia { set { inertia = value; } get { return inertia; } }
-		[SerializeField][Range(0.0f, 1.0f)] private float inertia;
+		// /// <summary>This allows you to control how much momentum is retained when the dragging fingers are all released.
+		// /// NOTE: This requires <b>Damping</b> to be above 0.</summary>
+		// public float Inertia { set { inertia = value; } get { return inertia; } }
+		// [SerializeField][Range(0.0f, 1.0f)] private float inertia;
 
 		/// <summary>This allows you to set the target position value when calling the <b>ResetPosition</b> method.</summary>
 		public Vector3 DefaultPosition { set { defaultPosition = value; } get { return defaultPosition; } }
 		[SerializeField] private Vector3 defaultPosition;
 
-		[SerializeField]
 		private Vector3 remainingDelta;
 
 
@@ -104,31 +103,16 @@ namespace Lean.Touch {
 			var screenPoint = LeanGesture.GetScreenCenter(fingers);
 
 			// Get the world delta of them after conversion
-			var worldDelta = ScreenDepth.ConvertDelta(lastScreenPoint, screenPoint, gameObject);
-
-			// Store the current position OF THE CAMERA
-			var oldPosition = ScreenDepth.Camera.transform.localPosition;
+			var worldDelta = ScreenDepth.ConvertDelta(lastScreenPoint, screenPoint, ScreenDepth.Camera.gameObject);
 
 			// Pan the CAMERA based on the world delta
-			ScreenDepth.Camera.transform.position -= worldDelta * sensitivity;
+			remainingDelta += -worldDelta * sensitivity;
+			Vector3 origPos = ScreenDepth.Camera.transform.position;
+			float dampFactor = CwHelper.DampenFactor(damping, Time.deltaTime);
+			ScreenDepth.Camera.transform.position = Vector3.Lerp(origPos, origPos + remainingDelta, dampFactor);
 
-			// Add to remainingDelta of the CAMERA
-			remainingDelta += ScreenDepth.Camera.transform.localPosition - oldPosition;
-
-			// Get t value
-			var factor = CwHelper.DampenFactor(damping, Time.deltaTime);
-
-			// Dampen remainingDelta
-			var newRemainingDelta = Vector3.Lerp(remainingDelta, Vector3.zero, factor);
-
-			// Shift the CAMERA position by the change in delta (this is supposed to be a Drag Camera script, after all)
-			ScreenDepth.Camera.transform.localPosition = oldPosition + remainingDelta - newRemainingDelta;
-
-			if (fingers.Count == 0 && inertia > 0.0f && damping > 0.0f)
-				newRemainingDelta = Vector3.Lerp(newRemainingDelta, remainingDelta, inertia);
-
-			// Update remainingDelta with the dampened value
-			remainingDelta = newRemainingDelta;
+			// Subtract amount moved from remainingDelta
+			remainingDelta -= ScreenDepth.Camera.transform.position - origPos;
 		}
 	}
 }
@@ -148,7 +132,7 @@ namespace Lean.Touch.Editor {
 			Draw("ScreenDepth");
 			Draw("sensitivity", "The movement speed will be multiplied by this.\n\n-1 = Inverted Controls.");
 			Draw("damping", "If you want this component to change smoothly over time, then this allows you to control how quick the changes reach their target value.\n\n-1 = Instantly change.\n\n1 = Slowly change.\n\n10 = Quickly change.");
-			Draw("inertia", "This allows you to control how much momentum is retained when the dragging fingers are all released.\n\nNOTE: This requires <b>Damping</b> to be above 0.");
+			// Draw("inertia", "This allows you to control how much momentum is retained when the dragging fingers are all released.\n\nNOTE: This requires <b>Damping</b> to be above 0.");
 			Draw("defaultPosition", "This allows you to set the target position value when calling the <b>ResetPosition</b> method.");
 		}
 	}

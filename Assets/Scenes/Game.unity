@@ -822,12 +822,10 @@ MonoBehaviour:
     Layers:
       serializedVersion: 2
       m_Bits: 4294967291
-    Distance: 0
+    Distance: -10
   sensitivity: 1
   damping: -1
-  inertia: 0
   defaultPosition: {x: 0, y: 0, z: 0}
-  remainingDelta: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
