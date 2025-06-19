@@ -3,12 +3,14 @@ using Lean.Touch;
 using UnityEngine.InputSystem;
 
 public class ScrollZoomCamera : MonoBehaviour {
+
 	[SerializeField] LeanPinchCamera leanPinchCamera;
-	[SerializeField] private float zoomSpeed = 5f;	// actual values are around .005, so multiply/divide by 1000 to adjust
+	[SerializeField] private float zoomSpeed = 5f;	// actual values are around .005, so multiply/divide by 1000 when using
 	[SerializeField] private float smoothingSpeed = 2f;
 	private InputAction scrollAction;
 	private Vector2 scrollDelta;
 	private float targetZoom;
+
 
 	private void Start() {
 		if (leanPinchCamera == null)

@@ -7,6 +7,7 @@ namespace Lean.Touch {
 	[HelpURL(LeanTouch.HelpUrlPrefix + "LeanerDragCamera")]
 	[AddComponentMenu("Leaner Drag Camera")]
 	public class LeanerDragCamera : MonoBehaviour {
+
 		/// <summary>The method used to find fingers to use with this component. See LeanFingerFilter documentation for more information.</summary>
 		public LeanFingerFilter Use = new LeanFingerFilter(true);
 
@@ -108,12 +109,17 @@ namespace Lean.Touch {
 			// Pan the CAMERA based on the world delta
 			remainingDelta += -worldDelta * sensitivity;
 			Vector3 origPos = ScreenDepth.Camera.transform.position;
+			Vector3 targetPos = origPos + remainingDelta;
+			targetPos = ImageManager.Instance.ClampBounds(targetPos); // Make sure image still within camera frame
+			if (targetPos - remainingDelta != origPos)
+				remainingDelta = targetPos - origPos;
 			float dampFactor = CwHelper.DampenFactor(damping, Time.deltaTime);
-			ScreenDepth.Camera.transform.position = Vector3.Lerp(origPos, origPos + remainingDelta, dampFactor);
+			ScreenDepth.Camera.transform.position = Vector3.Lerp(origPos, targetPos, dampFactor);
 
 			// Subtract amount moved from remainingDelta
 			remainingDelta -= ScreenDepth.Camera.transform.position - origPos;
 		}
+
 	}
 }
 
