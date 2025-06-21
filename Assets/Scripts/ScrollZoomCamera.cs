@@ -6,7 +6,8 @@ using Lean.Touch;
 
 public class ScrollZoomCamera : MonoBehaviour {
 
-	[SerializeField] private float scrollZoomFactor = 5f; // actual values are around .005, so multiply/divide by 1000 when using
+	[SerializeField] private float scrollZoomFactor = 5f; // actual values are around .05, so multiply/divide by 100 when using
+	private float scalar = 100f;
 	private InputAction scrollAction;
 	private Vector2 scrollDelta;
 	private LeanPinchCamera leanPinchCamera;
@@ -22,7 +23,9 @@ public class ScrollZoomCamera : MonoBehaviour {
 
 		if (scrollDelta.y != 0) {
 			scrollDelta.y = scrollDelta.y > 0 ? scrollDelta.y / 2 : scrollDelta.y;  // slow zoom in since its faster than zoom out
-			ImageManager.Instance.targetZoom += scrollDelta.y * (1 + scrollZoomFactor / 1000);
+			float zoomDelta = scrollDelta.y * (scrollZoomFactor / scalar);
+			// Debug.Log($"ScrollDelta {scrollDelta}, zoomDelta {zoomDelta}, origZoom {ImageManager.Instance.targetZoom}, targetZoom {ImageManager.Instance.targetZoom + zoomDelta}");
+			ImageManager.Instance.targetZoom += zoomDelta;
 			ImageManager.Instance.targetZoom = Mathf.Clamp(ImageManager.Instance.targetZoom, leanPinchCamera.ClampMin, leanPinchCamera.ClampMax);
 		}
 	}

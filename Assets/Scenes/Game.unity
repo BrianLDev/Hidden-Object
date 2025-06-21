@@ -215,7 +215,7 @@ MonoBehaviour:
   cam: {fileID: 519420031}
   spriteRenderer: {fileID: 317065062}
   leanPinchCamera: {fileID: 1930737037}
-  zoomSpeed: 3
+  zoomSpeed: 5
   zoomInFraction: 0.05
   targetZoom: 0
 --- !u!4 &30454309
@@ -786,7 +786,7 @@ MonoBehaviour:
   zoom: 5
   damping: -1
   clamp: 1
-  clampMin: 2
+  clampMin: 1
   clampMax: 5
   relative: 0
   ignoreZ: 0
