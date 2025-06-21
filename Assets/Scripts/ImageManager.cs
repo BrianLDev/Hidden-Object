@@ -2,6 +2,8 @@ using UnityEngine;
 using EcxUtilities;
 using Lean.Touch;
 
+// TODO: Consider merging/centralizing 3 zoom methods (1. LeanPinchCamera, 2. ImageManager, 3. ScrollZoomCamera)
+
 public class ImageManager : Singleton<ImageManager> {
 	[SerializeField] private Camera cam;
 	[SerializeField] private SpriteRenderer spriteRenderer; // for the hidden object image
@@ -9,7 +11,7 @@ public class ImageManager : Singleton<ImageManager> {
 	[SerializeField] private float zoomSpeed = 3f;
 	[SerializeField] private float zoomInFraction = 0.05f;
 	[HideInInspector] public float targetZoom;
-	private const float epsilon = 0.0001f;	// TODO: Move this to a global constants class at some point
+	private const float epsilon = 0.0001f;  // TODO: Move this to a global constants class at some point
 
 
 	private void Start() {
@@ -50,7 +52,6 @@ public class ImageManager : Singleton<ImageManager> {
 	public Vector3 GetImageMaxPos() =>
 		spriteRenderer.transform.position + spriteRenderer.bounds.size / 2;
 
-	// TODO: Consider merging/centralizing 3 zoom methods (1. this, 2. LeanPinchCamera, 3. ScrollZoomCamera)
 	public void ZoomIn(float fraction) =>
 		targetZoom = leanPinchCamera.Zoom * (1 - fraction);
 

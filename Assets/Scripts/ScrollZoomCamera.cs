@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using Lean.Touch;
 
 // TODO: Zoom in on mouse position
+// TODO: Consider merging/centralizing 3 zoom methods (1. LeanPinchCamera, 2. ImageManager, 3. ScrollZoomCamera)
 
 public class ScrollZoomCamera : MonoBehaviour {
 

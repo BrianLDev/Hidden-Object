@@ -786,8 +786,8 @@ MonoBehaviour:
   zoom: 5
   damping: -1
   clamp: 1
-  clampMin: 1
-  clampMax: 5
+  clampMin: 1.5
+  clampMax: 6
   relative: 0
   ignoreZ: 0
   ScreenDepth:
